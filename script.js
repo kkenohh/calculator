@@ -5,9 +5,10 @@
 
 // variables
 
-let total = '' + 0;
+let total = '0';
 let current = '';
-let curOperator;
+let last = '';
+let curOperator = 'equals';
 
 // queries and listeners
 
@@ -18,33 +19,30 @@ const currentPrint = document.querySelector('.current');
 currentPrint.textContent = current;
 
 const buttons = document.querySelectorAll('.button');
-buttons.forEach(addEventListener('click', buttonAction));
-console.log(buttons)
-window.addEventListener('keydown', keyAction);
 
 // operators 
 
 function add(a ,b) {
-    a = parseInt(a);
-    b = parseInt(b);
+    a = parseFloat(a);
+    b = parseFloat(b);
     return a + b;
 }
 
 function subtract(a, b) {
-    a = parseInt(a);
-    b = parseInt(b);
+    a = parseFloat(a);
+    b = parseFloat(b);
     return a - b;
 }
 
 function multiply(a, b) {
-    a = parseInt(a);
-    b = parseInt(b);
+    a = parseFloat(a);
+    b = parseFloat(b);
     return a * b;
 }
 
 function divide(a, b) {
-    a = parseInt(a);
-    b = parseInt(b);
+    a = parseFloat(a);
+    b = parseFloat(b);
     return a / b;
 }
 
@@ -69,17 +67,24 @@ function operate(operator, a, b) {
 
 function buttonAction(e) {
     let identity = e.target.className.match(/\w+/);
-    console.log(identity[0])
     switch (identity[0]) {
         case 'clear':
             total = '0';
             current = '';
             topPrint.textContent = '';
             currentPrint.textContent = '';
+            curOperator = 'equals';
+            last = '';
             break;
         case 'division':
+            if (curOperator != 'equals') {
+                total = '' + divide(total, current);
+            } else if (curOperator == 'equals' && last != '') {
+                total = last;
+            } else {
+                total = current;
+            }
             curOperator = 'division';
-            total = '' + divide(total, current);
             current = '';
             topPrint.textContent = `${total} /`;
             currentPrint.textContent = '';
@@ -97,8 +102,14 @@ function buttonAction(e) {
             currentPrint.textContent = `${current}`;
             break;
         case 'multiplication':
+            if (curOperator != 'equals') {
+                total = '' + multiply(total, current);
+            }else if (curOperator == 'equals' && last != '') {
+                total = last;
+            } else {
+                total = current;
+            }
             curOperator = 'multiplication';
-            total = '' + multiply(total, current);
             current = '';
             topPrint.textContent = `${total} x`;
             currentPrint.textContent = '';
@@ -116,8 +127,14 @@ function buttonAction(e) {
             currentPrint.textContent = `${current}`;
             break;
         case 'minus':
+            if (curOperator != 'equals') {
+                total = '' + subtract(total, current);
+            } else if (curOperator == 'equals' && last != '') {
+                total = last;
+            } else {
+                total = current;
+            }
             curOperator = 'minus';
-            total = '' + subtract(total, current);
             current = '';
             topPrint.textContent = `${total} -`;
             currentPrint.textContent = '';
@@ -135,8 +152,14 @@ function buttonAction(e) {
             currentPrint.textContent = `${current}`;
             break;
         case 'plus':
+            if (curOperator != 'equals') {
+                total = '' + add(total, current);
+            } else if (curOperator == 'equals' && last != '') {
+                total = last;
+            } else {
+                total = current;
+            }
             curOperator = 'plus';
-            total = '' + add(total, current);
             current = '';
             topPrint.textContent = `${total} +`;
             currentPrint.textContent = '';
@@ -165,11 +188,13 @@ function buttonAction(e) {
                 case 'multiplication':
                     total = '' + multiply(total, current);
                     break;
+                case 'equals':
+                    break;
             }
-            current = '';
+            last = total;
+            curOperator = 'equals';
             topPrint.textContent = '';
             currentPrint.textContent = `${total}`;
-            total = '0';
             break;
     }
 }
@@ -178,3 +203,8 @@ function keyAction(e) {
     let identity = e.keycode;
     
 }
+
+// event listeners
+
+buttons.forEach(addEventListener('click', buttonAction));
+window.addEventListener('keydown', keyAction);
