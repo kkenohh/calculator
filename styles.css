@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Orbitron);
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -18,20 +19,82 @@ body {
 #calculator {
     height: 800px;
     width: 600px;
+    padding: 24px 0;
     border: 16px solid #555;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
 #screen {
+    padding: 0;
     height: 100px;
     width: 525px;
     background-color: rgb(98, 121, 95);
+    text-align: right;
+}
+
+p {
+    margin: 0;
+    padding: 12px 12px 0 0;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 4px;
+}
+
+.top {
+    font-size: 20px;
+}
+
+.current {
+    font-size: 36px;
+    font-weight: bold;
 }
 
 #button-container {
     height: 625px;
     width: 525px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 24px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 500px;
+}
+
+.button {
+    height: 100px;
+    background-color: #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    border-radius: 100px;
+    margin: 0;
+}
+
+.small {
+    width: 100px;
+}
+
+.long {
+    width: 235px;
+}
+
+.longer {
+    width: 370px;
+}
+
+.fa-circle {
+    font-size: 12px;
+}
+
+.button:hover {
+    cursor: pointer;
 }
