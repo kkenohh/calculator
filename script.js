@@ -1,14 +1,15 @@
-// CURRENT PROBLEM:
-// 
-// still continues to add numbers together even after clearing it.
-
-
 // variables
 
 let total = '0';
 let current = '';
-let last = '';
-let curOperator = 'equals';
+let curOperator = '';
+let last;
+let key = {
+    'add': '+',
+    'subtract': '-',
+    'multiply': 'x',
+    'divide': '/'
+};
 
 // queries and listeners
 
@@ -43,22 +44,27 @@ function multiply(a, b) {
 function divide(a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
+    console.log(a / b)
     return a / b;
 }
 
 function operate(operator, a, b) {
+    if (total == 0) {
+        total = current;
+        return;
+    }
     switch (operator) {
-        case add:
-            add(a, b);
+        case 'add':
+            total = '' + add(a, b);
             break;
-        case subtract:
-            subtract(a, b);
+        case 'subtract':
+            total = '' + subtract(a, b);
             break;
-        case multiply:
-            multiply(a, b);
+        case 'multiply':
+            total = '' + multiply(a, b);
             break;
-        case divide:
-            divide(a, b);
+        case 'divide':
+            total = '' + divide(a, b); 
             break;
     }
 }
@@ -67,104 +73,73 @@ function operate(operator, a, b) {
 
 function buttonAction(e) {
     let identity = e.target.className.match(/\w+/);
+    if (Object.hasOwn(key, identity[0])) {
+        if (!curOperator) {
+            curOperator = `${key[identity[0]]}`;
+        }
+        if (Object.hasOwn(key, last)) {
+            curOperator = identity[0];
+            topPrint.textContent = `${total} ${key[identity[0]]}`;
+            return;
+        }
+        operate(curOperator, total, current);
+        curOperator = identity[0];
+        current = '';
+        topPrint.textContent = `${total} ${key[identity[0]]}`;
+        currentPrint.textContent = '';
+    }
+    console.log(identity)
     switch (identity[0]) {
         case 'clear':
-            total = '0';
-            current = '';
-            topPrint.textContent = '';
-            currentPrint.textContent = '';
-            curOperator = 'equals';
-            last = '';
-            break;
-        case 'division':
-            if (curOperator != 'equals') {
-                total = '' + divide(total, current);
-            } else if (curOperator == 'equals' && last != '') {
-                total = last;
-            } else {
-                total = current;
-            }
-            curOperator = 'division';
-            current = '';
-            topPrint.textContent = `${total} /`;
-            currentPrint.textContent = '';
+            clear();
             break;
         case 'seven':
+            if (curOperator == 'equals') clear();
             current += 7;
             currentPrint.textContent = `${current}`;
             break;
         case 'eight':
+            if (curOperator == 'equals') clear();
             current += 8;
             currentPrint.textContent = `${current}`;
             break;
         case 'nine':
+            if (curOperator == 'equals') clear();
             current += 9;
             currentPrint.textContent = `${current}`;
             break;
-        case 'multiplication':
-            if (curOperator != 'equals') {
-                total = '' + multiply(total, current);
-            }else if (curOperator == 'equals' && last != '') {
-                total = last;
-            } else {
-                total = current;
-            }
-            curOperator = 'multiplication';
-            current = '';
-            topPrint.textContent = `${total} x`;
-            currentPrint.textContent = '';
-            break;
         case 'four':
+            if (curOperator == 'equals') clear();
             current += 4;
             currentPrint.textContent = `${current}`;
             break;
         case 'five':
+            if (curOperator == 'equals') clear();
             current += 5;
             currentPrint.textContent = `${current}`;
             break;
         case 'six':
+            if (curOperator == 'equals') clear();
             current += 6;
             currentPrint.textContent = `${current}`;
             break;
-        case 'minus':
-            if (curOperator != 'equals') {
-                total = '' + subtract(total, current);
-            } else if (curOperator == 'equals' && last != '') {
-                total = last;
-            } else {
-                total = current;
-            }
-            curOperator = 'minus';
-            current = '';
-            topPrint.textContent = `${total} -`;
-            currentPrint.textContent = '';
-            break;
         case 'one':
+            if (curOperator == 'equals') clear();
             current += 1;
             currentPrint.textContent = `${current}`;
             break;
         case 'two':
+            if (curOperator == 'equals') clear();
             current += 2;
             currentPrint.textContent = `${current}`;
             break;
         case 'three':
+            if (curOperator == 'equals') clear();
             current += 3;
             currentPrint.textContent = `${current}`;
             break;
-        case 'plus':
-            if (curOperator != 'equals') {
-                total = '' + add(total, current);
-            } else if (curOperator == 'equals' && last != '') {
-                total = last;
-            } else {
-                total = current;
-            }
-            curOperator = 'plus';
-            current = '';
-            topPrint.textContent = `${total} +`;
-            currentPrint.textContent = '';
-            break;
         case 'zero':
+            if (curOperator == 'equals') clear();
             current += 0;
             currentPrint.textContent = `${current}`;
             break;
@@ -175,28 +150,21 @@ function buttonAction(e) {
             }
             break;
         case 'equals':
-            switch (curOperator) {
-                case 'plus':
-                    total = '' + add(total, current);
-                    break;
-                case 'minus':
-                    total = '' + subtract(total, current);
-                    break;
-                case 'division':
-                    total = '' + divide(total, current);
-                    break;
-                case 'multiplication':
-                    total = '' + multiply(total, current);
-                    break;
-                case 'equals':
-                    break;
-            }
-            last = total;
+            operate(curOperator, total, current);
+            current = '';
             curOperator = 'equals';
             topPrint.textContent = '';
             currentPrint.textContent = `${total}`;
             break;
     }
+}
+
+function clear() {
+    total = '0';
+    current = '';
+    topPrint.textContent = '';
+    currentPrint.textContent = '';
+    curOperator = '';
 }
 
 function keyAction(e) {
